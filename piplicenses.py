@@ -207,6 +207,7 @@ def get_packages(
             lambda file: pattern.match(file.name), pkg_files
         )
         included_text = ''
+        delimiter = '-----------------------\n'
         for rel_path in matched_rel_paths:
             abs_path = Path(pkg.locate_file(rel_path))
             if not abs_path.is_file():
@@ -215,7 +216,8 @@ def get_packages(
             with open(
                 abs_path, encoding="utf-8", errors="backslashreplace"
             ) as included_file_handle:
-                included_text += included_file_handle.read() + '-----------------------/b'
+                included_text += included_file_handle.read() + delimiter
+        included_text = included_text[:len(included_text)-len(delimiter)]
         return (included_file, included_text)
 
     def get_pkg_info(pkg: Distribution) -> dict[str, str | list[str]]:
